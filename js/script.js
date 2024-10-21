@@ -1,3 +1,4 @@
+// Loading Home Data
 const loadHome = async() => {
     const url = 'https://openapi.programming-hero.com/api/ai/tools';
     try {
@@ -8,14 +9,16 @@ const loadHome = async() => {
         console.log(error);
     }
 }
+
+//Displaying the Data
 const displayHome = (items) => {
     const cardContainer = document.getElementById('cards-container');
     items.forEach(item => {
         // console.log(item);
         const card = document.createElement('div');
-        card.classList.add('block', 'max-w-sm', 'p-6', 'bg-white', 'border', 'border-gray-200', 'rounded-lg', 'shadow', 'hover:bg-gray-100', 'dark:bg-gray-800', 'dark:border-gray-700', 'dark:hover:bg-gray-700', 'mx-auto');
+        card.classList.add('block', 'w-full', 'p-6', 'bg-white', 'border', 'border-gray-200', 'rounded-lg', 'shadow', 'hover:bg-gray-100', 'dark:bg-gray-800', 'dark:border-gray-700', 'dark:hover:bg-gray-700', 'mx-auto');
         card.innerHTML = `
-        <img class="rounded-lg h-2/5" src="${item?.image}" alt="image">
+        <img class="rounded-lg h-2/5 w-full" src="${item?.image}" alt="image">
                 <h6 class="my-2 tracking-tight text-gray-900 dark:text-white">Features</h6>
                 <div class="font-normal text-gray-700 dark:text-gray-400">
                     <ul class="list-inside list-decimal">
@@ -30,13 +33,13 @@ const displayHome = (items) => {
                 <!-- card-footer -->
                 <div class="grid grid-cols-6 gap-4">
                     <div class="col-span-5">
-                        <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">${item.name}</h5>
+                        <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">${item?.name}</h5>
                         <p class="font-normal text-gray-700 dark:text-gray-400">Published: ${item?.published_in ? item.published_in : 'Publishing date not Found'}</p>
                     </div>
                     <!-- card-detail -->
                     <div class="content-center">
                         <!-- modal button start -->
-                        <button onclick="loadModalDet('${item.id}')">
+                        <button onclick="loadModalDet('${item?.id}')">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                 version="1.1" width="15" height="15" viewBox="0 0 256 256" xml:space="preserve">
                                 <defs></defs>
@@ -69,58 +72,69 @@ const displayHome = (items) => {
                 </div>
         `;
         cardContainer.appendChild(card);
-    
     });
 }
 
+//Loading Details for Modals
 const loadModalDet = async (id) => {
     const url = `https://openapi.programming-hero.com/api/ai/tool/${id}`;
-    const res = await fetch(url);
-    const data = await res.json()
-    showModalDet(data.data);
+    console.log(url);
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+        showModalDet(data.data);
+    } catch (error) {
+        console.log(error);
+    }
 }
+
+//Displaying details for modals
 const showModalDet = (giant) => {
-    console.log(giant);
+    // console.log(giant);
     const showDetCont = document.getElementById('modal-inner-details');
     showDetCont.innerHTML = `
     <!-- modal detail section left -->
-                        <div class="w-full md:w-1/2 border dark:border-0 border-red-600 bg-red-50 dark:bg-gray-800 rounded-lg p-5">
-                            <h3 class="text-lg font-bold">ChatGPT is an AI-powered chatbot platform that uses OpenAI's GPT technology to simulate human conversation.</h3>
-                            <!-- prices section -->
-                            <div class="flex flex-col md:flex-row gap-2 pt-4">
-                                <p class="bg-white rounded-lg text-center text-green-600 font-bold w-3/5 p-2  mx-auto">10 <br>month<br>Basic</p>
+        <div class="w-full md:w-7/12 border dark:border-0 border-red-600 bg-red-50 dark:bg-gray-800 rounded-lg p-5">
+            <h3 class="text-lg font-bold">${giant?.description}</h3>
+            <!-- prices section -->
+            <div class="flex flex-col md:flex-row gap-2 pt-4">
+                <p class="bg-white rounded-lg text-center text-green-600 font-bold w-3/5 p-2  mx-auto">${giant?.pricing[0].price == 0 ? 'Free of Cost' : giant.pricing[0].price}<br>${giant?.pricing[0].plan ? giant.pricing[0].plan : 'Null'}</p>
                                 
-                                <p class="bg-white rounded-lg text-center text-orange-500 font-bold w-3/5 p-2 mx-auto">50/<br>month<br>Pro</p>
+                <p class="bg-white rounded-lg text-center text-orange-500 font-bold w-3/5 p-2 mx-auto">${giant?.pricing[1].price == 0 ? 'Free of Cost' : giant.pricing[1].price}<br>${giant?.pricing[1].plan ? giant.pricing[1].plan : 'Null'}</p>
                                 
-                                <p class="bg-white rounded-lg text-center text-red-600 font-bold w-3/5 p-2 mx-auto">Contact<br>Us<br>Enterprise</p>
-                            </div>
-                            <!-- modal detail Features -->
-                            <div class="py-4 flex flex-col md:flex-row gap-2">
-                                <ul class="w-1/2 md:w-3/5 list-inside list-disc mx-auto">
-                                    <h3 class="text-lg font-bold">Click the</h3>
-                                    <li>1</li>
-                                    <li>2</li>
-                                    <li>3</li>
-                                </ul>
-                                <ul class="w-1/2 md:w-2/5 list-inside list-disc mx-auto">
-                                    <h3 class="text-lg font-bold">Click the</h3>
-                                    <li>1</li>
-                                    <li>2</li>
-                                    <li>3</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!-- modal detail section right -->
-                        <div class="w-full md:w-1/2 border border-gray-200 dark:border-gray-700 rounded-lg p-5">
-                            <div>
-                                <img class="rounded-lg w-full max-w-sm" src="https://img.freepik.com/free-psdgoogle-icon-isolated-3d-render-illustration_47987-9777.jpg?size=338&ext=jpg" alt="">
-                            <p class="bg-red-500 rounded-lg text-center text-sm text-white w-1/6 p-1 absolute top-20 right-20 sm:top-24 sm:right-24">94% Accuracy</p>
-                            </div>
-                            <h3 class="text-lg font-bold text-center">Click the button below to close</h3>
-                            <h3 class="text-gray-500 text-center">Click the button below to close</h3>
-                        </div>
+                <p class="bg-white rounded-lg text-center text-red-600 font-bold w-3/5 p-2 mx-auto">${giant?.pricing[2].price == 0 ? 'Free of Cost' : giant.pricing[2].price}<br>${giant?.pricing[2].plan ? giant.pricing[2].plan : 'Null'}  </p>
+            </div>
+            <!-- modal detail Features -->
+            <div class="py-4 flex flex-col md:flex-row gap-2">
+                <ul class="w-1/2 md:w-3/5 list-inside list-disc mx-auto">
+                    <h3 class="text-lg font-bold">Features</h3>
+                    <li>${giant?.features[1].feature_name ? giant.features[1].feature_name : 'N/A'}</li>
+                    <li>${giant?.features[2].feature_name ? giant.features[2].feature_name : 'N/A'}</li>
+                    <li>${giant?.features[3].feature_name ? giant.features[3].feature_name : 'N/A'}</li>
+                </ul>
+                <ul class="w-1/2 md:w-2/5 list-inside list-disc mx-auto">
+                    <h3 class="text-lg font-bold">Integrations</h3>
+                    <li>${giant?.integrations[0] ? giant.integrations[0] : 'N/A'}</li>
+                    <li>${giant?.integrations[1] ? giant.integrations[1] : 'N/A'}</li>
+                    <li>${giant?.integrations[2] ? giant.integrations[2] : 'N/A'}</li>
+                </ul>
+            </div>
+        </div>
+                        
+        <!-- modal detail section right -->
+        <div class="w-full md:w-5/12 border border-gray-200 dark:border-gray-700 rounded-lg p-5 relative">
+            <div>
+                <img class="rounded-lg w-full max-w-sm" src=${giant?.image_link[0] ? giant.image_link[0] : 'No Image'} alt="Image">
+                <p id="accuracy-sec" class="bg-red-500 rounded-lg text-center text-sm text-white  p-1 absolute top-6 right-6 ">${giant.accuracy.score*100}% Accuracy</p>
+            </div>
+            <h3 class="text-lg font-bold text-center pt-4">${giant?.input_output_examples[0].input ? giant.input_output_examples[0].input : ''}</h3>
+            <h3 class="text-gray-500 text-center">${giant?.input_output_examples[0].output ? giant.input_output_examples[0].output : ''}</h3>
+        </div>
     `;
+    if(0 >= giant.accuracy.score*100 || giant.accuracy.score*100 > 100){
+        document.getElementById("accuracy-sec").classList.add('hidden');
+    };
     my_modal_det.showModal();
 }
 
-loadHome();
+loadHome(); //top
