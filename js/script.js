@@ -36,7 +36,7 @@ const displayHome = (items) => {
                     <!-- card-detail -->
                     <div class="content-center">
                         <!-- modal button start -->
-                        <button onclick="my_modal_det.showModal()">
+                        <button onclick="loadModalDet('${item.id}')">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                 version="1.1" width="15" height="15" viewBox="0 0 256 256" xml:space="preserve">
                                 <defs></defs>
@@ -64,55 +64,7 @@ const displayHome = (items) => {
                             </svg>
                         </button>
                         <!-- modal button end  -->
-                        <!-- modal Details -->
-                        <dialog id="my_modal_det" class="modal">
-                            <div class="modal-box w-10/12 max-w-4xl">
-                                <div class="flex flex-col-reverse md:flex-row gap-3 p-5 sm:p-10">
-                                    <!-- modal detail section left -->
-                                    <div class="w-full md:w-1/2 border dark:border-0 border-red-600 bg-red-50 dark:bg-gray-800 rounded-lg p-5">
-                                        <h3 class="text-lg font-bold">ChatGPT is an AI-powered chatbot platform that uses OpenAI's GPT technology to simulate human conversation.</h3>
-                                        <!-- prices section -->
-                                        <div class="flex flex-col md:flex-row gap-2 pt-4">
-                                            <p class="bg-white rounded-lg text-center text-green-600 font-bold w-3/5 p-2  mx-auto">10 <br>month<br>Basic</p>
-                                            
-                                            <p class="bg-white rounded-lg text-center text-orange-500 font-bold w-3/5 p-2 mx-auto">50/<br>month<br>Pro</p>
-                                            
-                                            <p class="bg-white rounded-lg text-center text-red-600 font-bold w-3/5 p-2 mx-auto">Contact<br>Us<br>Enterprise</p>
-                                        </div>
-                                        <!-- modal detail Features -->
-                                        <div class="py-4 flex flex-col md:flex-row gap-2">
-                                            <ul class="w-1/2 md:w-3/5 list-inside list-disc mx-auto">
-                                                <h3 class="text-lg font-bold">Click the</h3>
-                                                <li>1</li>
-                                                <li>2</li>
-                                                <li>3</li>
-                                            </ul>
-                                            <ul class="w-1/2 md:w-2/5 list-inside list-disc mx-auto">
-                                                <h3 class="text-lg font-bold">Click the</h3>
-                                                <li>1</li>
-                                                <li>2</li>
-                                                <li>3</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <!-- modal detail section right -->
-                                    <div class="w-full md:w-1/2 border border-gray-200 dark:border-gray-700 rounded-lg p-5">
-                                        <div>
-                                            <img class="rounded-lg w-full max-w-sm" src="https://img.freepik.com/free-psdgoogle-icon-isolated-3d-render-illustration_47987-9777.jpg?size=338&ext=jpg" alt="">
-                                        <p class="bg-red-500 rounded-lg text-center text-sm text-white w-1/6 p-1 absolute top-20 right-20 sm:top-24 sm:right-24">94% Accuracy</p>
-                                        </div>
-                                        <h3 class="text-lg font-bold text-center">Click the button below to close</h3>
-                                        <h3 class="text-gray-500 text-center">Click the button below to close</h3>
-                                    </div>
-                                </div>
-                                <div class="modal-action">
-                                    <form method="dialog">
-                                        <!-- modal close button -->
-                                        <button class="btn btn-sm btn-circle btn-ghost text-red-500 absolute right-1 top-1">✕</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </dialog>
+                        
                     </div>
                 </div>
         `;
@@ -121,18 +73,54 @@ const displayHome = (items) => {
     });
 }
 
-const loadModalDet = async () => {
-    const url = 'https://openapi.programming-hero.com/api/ai/tool/01';
+const loadModalDet = async (id) => {
+    const url = `https://openapi.programming-hero.com/api/ai/tool/${id}`;
     const res = await fetch(url);
     const data = await res.json()
-    console.log(data.data);
-    // showModalDet(data.data);
+    showModalDet(data.data);
 }
-// const showModalDet = (giants) => {
-//     giants.forEach(giant => {
-//         console.log(giant);
-//     })
-// }
+const showModalDet = (giant) => {
+    console.log(giant);
+    const showDetCont = document.getElementById('modal-inner-details');
+    showDetCont.innerHTML = `
+    <!-- modal detail section left -->
+                        <div class="w-full md:w-1/2 border dark:border-0 border-red-600 bg-red-50 dark:bg-gray-800 rounded-lg p-5">
+                            <h3 class="text-lg font-bold">ChatGPT is an AI-powered chatbot platform that uses OpenAI's GPT technology to simulate human conversation.</h3>
+                            <!-- prices section -->
+                            <div class="flex flex-col md:flex-row gap-2 pt-4">
+                                <p class="bg-white rounded-lg text-center text-green-600 font-bold w-3/5 p-2  mx-auto">10 <br>month<br>Basic</p>
+                                
+                                <p class="bg-white rounded-lg text-center text-orange-500 font-bold w-3/5 p-2 mx-auto">50/<br>month<br>Pro</p>
+                                
+                                <p class="bg-white rounded-lg text-center text-red-600 font-bold w-3/5 p-2 mx-auto">Contact<br>Us<br>Enterprise</p>
+                            </div>
+                            <!-- modal detail Features -->
+                            <div class="py-4 flex flex-col md:flex-row gap-2">
+                                <ul class="w-1/2 md:w-3/5 list-inside list-disc mx-auto">
+                                    <h3 class="text-lg font-bold">Click the</h3>
+                                    <li>1</li>
+                                    <li>2</li>
+                                    <li>3</li>
+                                </ul>
+                                <ul class="w-1/2 md:w-2/5 list-inside list-disc mx-auto">
+                                    <h3 class="text-lg font-bold">Click the</h3>
+                                    <li>1</li>
+                                    <li>2</li>
+                                    <li>3</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- modal detail section right -->
+                        <div class="w-full md:w-1/2 border border-gray-200 dark:border-gray-700 rounded-lg p-5">
+                            <div>
+                                <img class="rounded-lg w-full max-w-sm" src="https://img.freepik.com/free-psdgoogle-icon-isolated-3d-render-illustration_47987-9777.jpg?size=338&ext=jpg" alt="">
+                            <p class="bg-red-500 rounded-lg text-center text-sm text-white w-1/6 p-1 absolute top-20 right-20 sm:top-24 sm:right-24">94% Accuracy</p>
+                            </div>
+                            <h3 class="text-lg font-bold text-center">Click the button below to close</h3>
+                            <h3 class="text-gray-500 text-center">Click the button below to close</h3>
+                        </div>
+    `;
+    my_modal_det.showModal();
+}
 
 loadHome();
-// loadModalDet();
