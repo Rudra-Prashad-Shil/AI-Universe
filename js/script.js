@@ -1,5 +1,6 @@
 // Loading Home Data
 const loadHome = async() => {
+    loaderTrigger(true);
     const url = 'https://openapi.programming-hero.com/api/ai/tools';
     try {
         const res = await fetch(url);
@@ -72,13 +73,14 @@ const displayHome = (items) => {
                 </div>
         `;
         cardContainer.appendChild(card);
+        loaderTrigger(false);
     });
 }
 
 //Loading Details for Modals
 const loadModalDet = async (id) => {
+    loaderTrigger(true);
     const url = `https://openapi.programming-hero.com/api/ai/tool/${id}`;
-    console.log(url);
     try {
         const res = await fetch(url);
         const data = await res.json();
@@ -135,6 +137,18 @@ const showModalDet = (giant) => {
         document.getElementById("accuracy-sec").classList.add('hidden');
     };
     my_modal_det.showModal();
+    loaderTrigger(false);
+}
+
+//loader Function
+const loaderTrigger = isloading => {
+    const loader = document.getElementById('loading');
+    if (isloading) {
+        loader.classList.remove('hidden');
+    }
+    else {
+        loader.classList.add('hidden');
+    }
 }
 
 loadHome(); //top
