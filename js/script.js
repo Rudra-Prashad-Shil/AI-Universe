@@ -1,18 +1,31 @@
 // Loading Home Data
-const loadHome = async() => {
+const loadHome = async(datalimit) => {
     loaderTrigger(true);
     const url = 'https://openapi.programming-hero.com/api/ai/tools';
     try {
         const res = await fetch(url);
         const data = await res.json();
-        displayHome(data.data.tools);
+        displayHome(data?.data?.tools, datalimit);
     } catch (error) {
         console.log(error);
     }
 }
 
 //Displaying the Data
-const displayHome = (items) => {
+const displayHome = (items, datalimit) => {
+
+    const cardsCont = document.getElementById('cards-container');
+    const btnShowAll = document.getElementById('show-all');
+    cardsCont.innerText = '';
+
+    if (datalimit && items.length > 8) {
+        items = items.slice(0,8);
+        btnShowAll.classList.remove('hidden');
+        }
+    else {
+        btnShowAll.classList.add('hidden');
+    }
+
     const cardContainer = document.getElementById('cards-container');
     items.forEach(item => {
         // console.log(item);
@@ -84,7 +97,7 @@ const loadModalDet = async (id) => {
     try {
         const res = await fetch(url);
         const data = await res.json();
-        showModalDet(data.data);
+        showModalDet(data?.data);
     } catch (error) {
         console.log(error);
     }
@@ -100,19 +113,19 @@ const showModalDet = (giant) => {
             <h3 class="text-lg font-bold">${giant?.description}</h3>
             <!-- prices section -->
             <div class="flex flex-col md:flex-row gap-2 pt-4">
-                <p class="bg-white rounded-lg text-center text-green-600 font-bold w-3/5 p-2  mx-auto">${giant?.pricing[0].price == 0 ? 'Free of Cost' : giant.pricing[0].price}<br>${giant?.pricing[0].plan ? giant.pricing[0].plan : 'Null'}</p>
+                <p class="bg-white rounded-lg text-center text-green-600 font-bold w-3/5 p-2  mx-auto">${giant?.pricing[0]?.price == 0 ? 'Free of Cost' : giant.pricing[0].price}<br>${giant?.pricing[0]?.plan ? giant.pricing[0].plan : 'Null'}</p>
                                 
-                <p class="bg-white rounded-lg text-center text-orange-500 font-bold w-3/5 p-2 mx-auto">${giant?.pricing[1].price == 0 ? 'Free of Cost' : giant.pricing[1].price}<br>${giant?.pricing[1].plan ? giant.pricing[1].plan : 'Null'}</p>
+                <p class="bg-white rounded-lg text-center text-orange-500 font-bold w-3/5 p-2 mx-auto">${giant?.pricing[1]?.price == 0 ? 'Free of Cost' : giant.pricing[1].price}<br>${giant?.pricing[1]?.plan ? giant.pricing[1].plan : 'Null'}</p>
                                 
-                <p class="bg-white rounded-lg text-center text-red-600 font-bold w-3/5 p-2 mx-auto">${giant?.pricing[2].price == 0 ? 'Free of Cost' : giant.pricing[2].price}<br>${giant?.pricing[2].plan ? giant.pricing[2].plan : 'Null'}  </p>
+                <p class="bg-white rounded-lg text-center text-red-600 font-bold w-3/5 p-2 mx-auto">${giant?.pricing[2]?.price == 0 ? 'Free of Cost' : giant.pricing[2].price}<br>${giant?.pricing[2]?.plan ? giant.pricing[2].plan : 'Null'}  </p>
             </div>
             <!-- modal detail Features -->
             <div class="py-4 flex flex-col md:flex-row gap-2">
                 <ul class="w-1/2 md:w-3/5 list-inside list-disc mx-auto">
                     <h3 class="text-lg font-bold">Features</h3>
-                    <li>${giant?.features[1].feature_name ? giant.features[1].feature_name : 'N/A'}</li>
-                    <li>${giant?.features[2].feature_name ? giant.features[2].feature_name : 'N/A'}</li>
-                    <li>${giant?.features[3].feature_name ? giant.features[3].feature_name : 'N/A'}</li>
+                    <li>${giant?.features[1]?.feature_name ? giant.features[1].feature_name : 'N/A'}</li>
+                    <li>${giant?.features[2]?.feature_name ? giant.features[2].feature_name : 'N/A'}</li>
+                    <li>${giant?.features[3]?.feature_name ? giant.features[3].feature_name : 'N/A'}</li>
                 </ul>
                 <ul class="w-1/2 md:w-2/5 list-inside list-disc mx-auto">
                     <h3 class="text-lg font-bold">Integrations</h3>
@@ -129,8 +142,8 @@ const showModalDet = (giant) => {
                 <img class="rounded-lg w-full max-w-sm" src=${giant?.image_link[0] ? giant.image_link[0] : 'No Image'} alt="Image">
                 <p id="accuracy-sec" class="bg-red-500 rounded-lg text-center text-sm text-white  p-1 absolute top-6 right-6 ">${giant.accuracy.score*100}% Accuracy</p>
             </div>
-            <h3 class="text-lg font-bold text-center pt-4">${giant?.input_output_examples[0].input ? giant.input_output_examples[0].input : ''}</h3>
-            <h3 class="text-gray-500 text-center">${giant?.input_output_examples[0].output ? giant.input_output_examples[0].output : ''}</h3>
+            <h3 class="text-lg font-bold text-center pt-4">${giant?.input_output_examples[0]?.input ? giant.input_output_examples[0].input : ''}</h3>
+            <h3 class="text-gray-500 text-center">${giant?.input_output_examples[0]?.output ? giant.input_output_examples[0].output : ''}</h3>
         </div>
     `;
     if(0 >= giant.accuracy.score*100 || giant.accuracy.score*100 > 100){
@@ -151,4 +164,9 @@ const loaderTrigger = isloading => {
     }
 }
 
-loadHome(); //top
+//show all Functionality
+document.getElementById('show-all').addEventListener('click', () => {
+    loadHome();
+})
+
+loadHome(8); //top
